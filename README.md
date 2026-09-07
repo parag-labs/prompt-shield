@@ -12,13 +12,19 @@ Prompt injection is OWASP's #1 LLM risk, and accidental PII/secret leakage in re
 
 ## How it works
 
-```
-User ─▶ [ INBOUND: injection/jailbreak detection ] ─▶ LLM
-                                                        │
-User ◀─ [ OUTBOUND: PII / secret redaction ] ◀─────────┘
-                        │
-                        ▼
-               stats: blocked / redacted / attack patterns
+
+```mermaid
+flowchart LR
+  classDef proc fill:#4a90e2,stroke:#2c5aa0,color:#fff
+  classDef good fill:#27ae60,stroke:#1e8449,color:#fff
+  classDef bad fill:#e74c3c,stroke:#c0392b,color:#fff
+  classDef work fill:#8e44ad,stroke:#6c3483,color:#fff
+  IN["user input<br/>(may be hostile)"]:::bad
+  INB["inbound - injection check<br/>heuristic risk score (OWASP-LLM01)<br/>flag / refuse"]:::work
+  MODEL["the model"]:::proc
+  OUTB["outbound - PII / secret redaction<br/>match known shapes (email, SSN,<br/>card, phone, key), strip all"]:::work
+  CLEAN["clean response<br/>user sees redacted output"]:::good
+  IN --> INB --> MODEL --> OUTB --> CLEAN
 ```
 
 ## Quickstart
