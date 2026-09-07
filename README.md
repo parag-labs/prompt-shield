@@ -45,6 +45,17 @@ safe = shield.guard("Who is the admin?", llm=lambda p: "Email admin@corp.com")
 
 Extend detection with embedding-similarity to a known-attack corpus or Presidio/spaCy NER - the interfaces stay the same.
 
+## Layout
+
+```
+prompt-shield/
+├── promptshield/
+│   ├── firewall.py     # PromptShield.guard() — the inbound + outbound middleware
+│   └── detectors/      # injection signatures + PII/secret redactors
+├── tests/              # incl. an adversarial fuzz suite (secrets buried in noise, none leak)
+└── DESIGN.md           # why redaction is deny-leaning, the obfuscation boundary, the non-goals
+```
+
 ## Design notes
 
 - **[DESIGN.md](DESIGN.md)** - why redaction is deny-leaning and injection detection is
