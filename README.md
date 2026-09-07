@@ -12,18 +12,17 @@ Prompt injection is OWASP's #1 LLM risk, and accidental PII/secret leakage in re
 
 ## How it works
 
-
 ```mermaid
 flowchart LR
-  classDef proc fill:#4a90e2,stroke:#2c5aa0,color:#fff
-  classDef good fill:#27ae60,stroke:#1e8449,color:#fff
-  classDef bad fill:#e74c3c,stroke:#c0392b,color:#fff
-  classDef work fill:#8e44ad,stroke:#6c3483,color:#fff
-  IN["user input<br/>(may be hostile)"]:::bad
-  INB["inbound - injection check<br/>heuristic risk score (OWASP-LLM01)<br/>flag / refuse"]:::work
-  MODEL["the model"]:::proc
-  OUTB["outbound - PII / secret redaction<br/>match known shapes (email, SSN,<br/>card, phone, key), strip all"]:::work
-  CLEAN["clean response<br/>user sees redacted output"]:::good
+  classDef proc fill:#eff6ff,stroke:#3b82f6,color:#1e3a8a
+  classDef good fill:#f0fdf4,stroke:#22c55e,color:#14532d
+  classDef bad fill:#fef2f2,stroke:#ef4444,color:#7f1d1d
+  classDef work fill:#faf5ff,stroke:#a855f7,color:#581c87
+  IN["User input"]:::bad
+  INB["Injection check"]:::work
+  MODEL["The model"]:::proc
+  OUTB["Redact PII / secrets"]:::work
+  CLEAN["Safe output"]:::good
   IN --> INB --> MODEL --> OUTB --> CLEAN
 ```
 
