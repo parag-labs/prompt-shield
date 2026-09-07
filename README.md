@@ -50,15 +50,28 @@ safe = shield.guard("Who is the admin?", llm=lambda p: "Email admin@corp.com")
 
 Extend detection with embedding-similarity to a known-attack corpus or Presidio/spaCy NER - the interfaces stay the same.
 
+## Three languages, one behavior
+
+The injection detector, the PII redactor, and the guard middleware — plus the same
+15 tests (including the adversarial fuzz suite) — in each language:
+
+| Language | Tests | Run |
+|----------|:-----:|-----|
+| Python | 15 | `pytest -q` |
+| C# (.NET 10) | 15 | `cd csharp && dotnet test` |
+| Java (17+) | 15 | `cd java && mvn test` |
+
 ## Layout
 
 ```
 prompt-shield/
-├── promptshield/
-│   ├── firewall.py     # PromptShield.guard() — the inbound + outbound middleware
-│   └── detectors/      # injection signatures + PII/secret redactors
-├── tests/              # incl. an adversarial fuzz suite (secrets buried in noise, none leak)
-└── DESIGN.md           # why redaction is deny-leaning, the obfuscation boundary, the non-goals
+├── promptshield/          the firewall + detectors (Python)
+│   ├── firewall.py        PromptShield.guard() — the inbound + outbound middleware
+│   └── detectors/         injection signatures + PII/secret redactors
+├── csharp/                the same detectors + firewall, ported to .NET 10 (xUnit)
+├── java/                  the same, in Java 17+ (JUnit / Maven)
+├── tests/                 incl. an adversarial fuzz suite (secrets buried in noise, none leak)
+└── DESIGN.md              why redaction is deny-leaning, the obfuscation boundary, the non-goals
 ```
 
 ## Design notes
