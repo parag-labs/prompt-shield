@@ -22,7 +22,7 @@ prompt-shield sits on both. Goals:
 
 ![threat model](docs/diagrams/threat-model.png)
 
-*(Source: [`docs/diagrams/threat-model.excalidraw`](docs/diagrams/threat-model.excalidraw) - editable in [excalidraw](https://aka.ms/excalidraw).)*
+*(The same diagram renders inline as Mermaid in the [README](README.md#how-it-works); this PNG is a static export.)*
 
 ## Key design decisions
 
