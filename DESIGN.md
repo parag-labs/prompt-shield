@@ -24,6 +24,13 @@ prompt-shield sits on both. Goals:
 
 *(The [README](README.md#how-it-works) has a quick Mermaid overview of the same flow; this is the dedicated threat model - it shows why the inbound and outbound edges are deliberately asymmetric.)*
 
+<details>
+<summary>Before the redraw - the earlier version of this diagram</summary>
+
+![threat model, before the redraw](docs/diagrams/threat-model-v1.png)
+
+</details>
+
 ## Key design decisions
 
 **Deny-leaning on output, best-effort on input - on purpose.** Redaction and detection
