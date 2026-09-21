@@ -22,7 +22,7 @@ prompt-shield sits on both. Goals:
 
 ![threat model](docs/diagrams/threat-model.png)
 
-*(The same diagram renders inline as Mermaid in the [README](README.md#how-it-works); this PNG is a static export.)*
+*(The [README](README.md#how-it-works) has a quick Mermaid overview of the same flow; this is the dedicated threat model - it shows why the inbound and outbound edges are deliberately asymmetric.)*
 
 ## Key design decisions
 
