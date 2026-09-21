@@ -1,0 +1,12 @@
+[package]
+name = "prompt-shield"
+version = "0.1.0"
+edition = "2021"
+description = "A firewall for LLM apps: block injection inbound, redact PII/secrets outbound."
+license = "MIT"
+
+[lib]
+name = "prompt_shield"
+
+[dependencies]
+regex = "1"

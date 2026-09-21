@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
 ![OWASP](https://img.shields.io/badge/OWASP-LLM01%20%2B%20PII-critical)
 ![security](https://img.shields.io/badge/security-firewall-blue)
-![tests](https://img.shields.io/badge/tests-6%20passing-brightgreen)
+![tests](https://img.shields.io/badge/tests-148%20passing-brightgreen)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
 **A firewall for LLM apps - block injection in, block leakage out.**
@@ -50,16 +50,30 @@ safe = shield.guard("Who is the admin?", llm=lambda p: "Email admin@corp.com")
 
 Extend detection with embedding-similarity to a known-attack corpus or Presidio/spaCy NER - the interfaces stay the same.
 
-## Three languages, one behavior
+## Six languages, one behavior
 
-The injection detector, the PII redactor, and the guard middleware — plus the same
-15 tests (including the adversarial fuzz suite) — in each language:
+The injection detector, the PII redactor, and the guard middleware — plus the
+adversarial fuzz suite — in each language. Python, C#, and Java share the same 15
+tests; the Go, Rust, and TypeScript ports add finer-grained per-function coverage
+while pinning the exact same behavior:
 
 | Language | Tests | Run |
 |----------|:-----:|-----|
 | Python | 15 | `pytest -q` |
 | C# (.NET 10) | 15 | `cd csharp && dotnet test` |
 | Java (17+) | 15 | `cd java && mvn test` |
+| Go (1.22+) | 34 | `cd go && go test ./...` |
+| Rust (2021) | 34 | `cd rust && cargo test` |
+| TypeScript (ES2021) | 35 | `cd ts && npm test` |
+
+Every port compiles the **same** injection and PII pattern strings and reports them
+verbatim, so `matched` is byte-identical across all six languages. One subtlety had
+to be handled: JavaScript's `RegExp` cannot parse a leading `(?i)` inline flag (Go's
+RE2 and Rust's `regex` crate both can), so the TypeScript port strips the `(?i)`
+prefix and applies the `i` flag instead. This preserves the reference's *per-pattern*
+case sensitivity — the `aws_key` signature (`AKIA…`) stays case-sensitive while the
+`api_key` signature stays case-insensitive — and none of the patterns use
+lookaround or backreferences, so no logic had to be restructured.
 
 ## Layout
 
@@ -70,6 +84,9 @@ prompt-shield/
 │   └── detectors/         injection signatures + PII/secret redactors
 ├── csharp/                the same detectors + firewall, ported to .NET 10 (xUnit)
 ├── java/                  the same, in Java 17+ (JUnit / Maven)
+├── go/                    the same, in Go 1.22+ (go test)
+├── rust/                  the same, in Rust 2021 (cargo test)
+├── ts/                    the same, in TypeScript / ES2021 (vitest)
 ├── tests/                 incl. an adversarial fuzz suite (secrets buried in noise, none leak)
 └── DESIGN.md              why redaction is deny-leaning, the obfuscation boundary, the non-goals
 ```

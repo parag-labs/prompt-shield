@@ -45,6 +45,21 @@ the tests document that boundary explicitly rather than hiding it.
 (thresholds, whether to raise or annotate) and tracks what it blocked/redacted, so a
 caller can enforce a policy and see what the shield did.
 
+**Identical behavior across six languages.** The reference is Python; C#, Java, Go,
+Rust, and TypeScript mirror it. Every port stores the *same* injection and PII pattern
+strings and reports them verbatim in `matched`, so the detector's observable output is
+byte-identical everywhere. The pattern set was chosen to stay portable: none of the
+signatures use lookahead, lookbehind, or backreferences, so Go's RE2 and Rust's `regex`
+crate — which reject those features — compile the Python strings directly, inline `(?i)`
+flag and all. The one genuine divergence is JavaScript: its `RegExp` cannot parse a
+leading `(?i)` inline flag, so the TypeScript port strips that prefix and applies the
+`i` flag when compiling. This is done *per pattern*, which is what preserves the
+reference's deliberate case-sensitivity split — `aws_key` (`AKIA…`) is case-sensitive so
+a lowercase look-alike is left alone, while `api_key` is case-insensitive — instead of
+flattening everything to one global flag. The cross-language tests assert the ports
+agree with Python on the same inputs, so this stays a compile-time detail, not a
+behavioral fork.
+
 ## Trade-offs I made on purpose
 
 - **Regex/heuristics, not a model.** Deterministic, fast, no dependencies, and
